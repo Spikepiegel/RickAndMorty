@@ -16,9 +16,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-            
-
+            let presenter = Presenter()
             let viewController = CharactersViewController()
+        
+            viewController.presenter = presenter
+            presenter.view = viewController
+        
             let navViewController = UINavigationController(rootViewController: viewController)
             navViewController.navigationBar.prefersLargeTitles = true
         

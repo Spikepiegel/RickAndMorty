@@ -8,11 +8,17 @@
 import Foundation
 import UIKit
 
-class CharactersTableViewCell: UITableViewCell {
+protocol CharactersTableViewCellProtocol {
+    func stopActivityIndicator()
+}
+
+
+class CharactersTableViewCell: UITableViewCell, CharactersTableViewCellProtocol {
     
     var characterImageView = CustomImageView()
     var characterNameLabel = UILabel()
     var characterLiveStatus = UILabel()
+    var activityIndicator = UIActivityIndicatorView(style: .medium)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -20,6 +26,7 @@ class CharactersTableViewCell: UITableViewCell {
         addSubview(characterNameLabel)
         addSubview(characterLiveStatus)
         
+        setActivityIndicatorConstraints()
         configureImageView()
         configureNameLabel()
         configureLiveStatus()
@@ -35,7 +42,7 @@ class CharactersTableViewCell: UITableViewCell {
     
     func set(model: Result) {
         characterNameLabel.text = model.name
-        characterLiveStatus.text = model.status?.rawValue
+        characterLiveStatus.text = model.status.rawValue
         if let strUrl = model.image.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed),
            let imgUrl = URL(string: strUrl) {
             characterImageView.download(from: imgUrl)
@@ -65,6 +72,13 @@ class CharactersTableViewCell: UITableViewCell {
         characterImageView.widthAnchor.constraint(equalTo: characterImageView.heightAnchor, multiplier: 16/16).isActive = true
     }
     
+    func setActivityIndicatorConstraints() {
+        activityIndicator = UIActivityIndicatorView(frame: CGRectMake(0, 0, 90, 80))
+        activityIndicator.backgroundColor = .white
+        characterImageView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+    }
+    
     func setNameLabelConstraints() {
         characterNameLabel.translatesAutoresizingMaskIntoConstraints = false
         characterNameLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
@@ -82,5 +96,10 @@ class CharactersTableViewCell: UITableViewCell {
         characterLiveStatus.layer.cornerRadius = 5
         characterLiveStatus.clipsToBounds = true
 
+    }
+    
+    func stopActivityIndicator() {
+        activityIndicator.stopAnimating()
+        //activityIndicator.hidesWhenStopped = true
     }
 }

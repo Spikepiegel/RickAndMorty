@@ -23,11 +23,11 @@ struct Info: Decodable {
 struct Result: Decodable {
     let id: Int?
     let name: String
-    let status: Status?
-    let species: Species?
+    let status: Status
+    let species: Species
     let type: String?
-    let gender: Gender?
-    let origin, location: Location?
+    let gender: Gender
+    let origin, location: Location
     let image: String
     let episode: [String]?
     let url: String?
@@ -42,8 +42,8 @@ enum Gender: String, Decodable {
 
 // MARK: - Location
 struct Location: Decodable {
-    let name: String?
-    let url: String?
+    let name: String
+    let url: String
 }
 
 enum Species: String, Decodable {

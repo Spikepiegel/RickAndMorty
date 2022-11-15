@@ -12,13 +12,16 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 
 class CustomImageView: UIImageView {
     
+    var activityIndicatorSettings: CharactersTableViewCellProtocol?
     var imageURL:URL?
     
     internal func download(from URL: URL) {
         imageURL = URL
+
         image = nil
         if let cachedImage = imageCache.object(forKey: URL as AnyObject) as? UIImage {
             image = cachedImage
+            activityIndicatorSettings?.stopActivityIndicator()
             return
         }
         URLSession.shared.dataTask(with: URL) {[weak self] data, response, error in
@@ -38,8 +41,12 @@ class CustomImageView: UIImageView {
                     weakSelf.image = responseImage
                 }
                 imageCache.setObject(responseImage, forKey: URL as AnyObject)
+
             }
+
             }.resume()
+        activityIndicatorSettings?.stopActivityIndicator()
+
     }
     
     
