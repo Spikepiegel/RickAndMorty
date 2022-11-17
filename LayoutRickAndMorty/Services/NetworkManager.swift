@@ -19,7 +19,7 @@ struct NetworkManager {
             do {
                 let saved: Model = try JSONDecoder().decode(Model.self, from: data)
                 print("success decodered")
-                print(saved)
+                //print(saved)
                 completion(saved)
             } catch {
                 print("error")

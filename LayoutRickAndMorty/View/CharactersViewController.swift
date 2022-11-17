@@ -112,13 +112,14 @@ extension CharactersViewController: UITableViewDelegate, UITableViewDataSource {
         let destination = CharacterInformationViewController()
         let character = rickModel[indexPath.row]
         navigationController?.pushViewController(destination, animated: true)
-        let _ = InformationViewModel(name: character.name,
+        let model = InformationViewModel(name: character.name,
                                      status: character.status.rawValue,
                                      race: character.species.rawValue,
                                      gender: character.gender.rawValue,
                                      image: character.image,
                                      origin: character.origin.name,
                                      currentLocation: character.location.name)
+        destination.model = model
         
     }
     
