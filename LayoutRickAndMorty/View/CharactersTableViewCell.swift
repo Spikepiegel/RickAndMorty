@@ -100,6 +100,7 @@ class CharactersTableViewCell: UITableViewCell, CharactersTableViewCellProtocol 
     
     func stopActivityIndicator() {
         activityIndicator.stopAnimating()
-        //activityIndicator.hidesWhenStopped = true
+        activityIndicator.hidesWhenStopped = true
+        activityIndicator.isHidden = true
     }
 }
