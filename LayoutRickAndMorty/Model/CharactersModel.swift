@@ -11,13 +11,13 @@ import Foundation
 struct Model: Decodable {
     let info: Info?
     let results: [Result]?
-    //let prev: JSONNull?
 }
 
 // MARK: - Info
 struct Info: Decodable {
     let count, pages: Int
-    let next: String
+    let next: String?
+    let prev: String?
 }
 
 // MARK: - Result
@@ -58,27 +58,4 @@ enum Status: String, Decodable {
     case unknown = "unknown"
 }
 
-//class JSONNull: Decodable, Hashable {
-//
-//    public static func == (lhs: JSONNull, rhs: JSONNull) -> Bool {
-//        return true
-//    }
-//
-//    public var hashValue: Int {
-//        return 0
-//    }
-//
-//    public init() {}
-//
-//    public required init(from decoder: Decoder) throws {
-//        let container = try decoder.singleValueContainer()
-//        if !container.decodeNil() {
-//            throw DecodingError.typeMismatch(JSONNull.self, DecodingError.Context(codingPath: decoder.codingPath, debugDescription: "Wrong type for JSONNull"))
-//        }
-//    }
-//
-//    public func encode(to encoder: Encoder) throws {
-//        var container = encoder.singleValueContainer()
-//        try container.encodeNil()
-//    }
-//}
+

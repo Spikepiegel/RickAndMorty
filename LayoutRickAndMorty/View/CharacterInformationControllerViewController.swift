@@ -19,14 +19,20 @@ class CharacterInformationViewController: UIViewController {
     var model: InformationViewModel?
     
     var generalInformation = UILabel()
-    var currentLocation = UILabel()
+    var locationInformation = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.gray
+        self.view.backgroundColor = UIColor.black
         configureCharImage()
         configureNameLabel()
         configureStatusLabel()
+        configureGeneralInformationLabel()
+        configureRaceLabel()
+        configureGenderLabel()
+        configureLocationInformation()
+        configureOriginLabel()
+        configureLocationLabel()
     }
     
     
@@ -63,6 +69,7 @@ class CharacterInformationViewController: UIViewController {
         characterNameLabel.font = UIFont.boldSystemFont(ofSize: 25)
         characterNameLabel.numberOfLines = 0
         characterNameLabel.textAlignment = .center
+        characterNameLabel.textColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
     }
     
     func configureStatusLabel() {
@@ -82,28 +89,99 @@ class CharacterInformationViewController: UIViewController {
         } else if characterStatusLabel.text == "Dead" {
             characterStatusLabel.textColor = #colorLiteral(red: 1, green: 0.1491314173, blue: 0, alpha: 1)
         } else {
-            characterStatusLabel.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            characterStatusLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            characterStatusLabel.text = "Alive status is unknown"
         }
     }
     
     func configureGeneralInformationLabel() {
+        self.view.addSubview(generalInformation)
         generalInformation.text = "General Information"
-        
+        generalInformation.translatesAutoresizingMaskIntoConstraints = false
+        generalInformation.topAnchor.constraint(equalTo: characterStatusLabel.bottomAnchor, constant: 4).isActive = true
+        generalInformation.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        generalInformation.clipsToBounds = true
+        generalInformation.textAlignment = .center
+        generalInformation.font = UIFont(name: "Noteworthy", size: 25)
+        generalInformation.backgroundColor = #colorLiteral(red: 0.4513868093, green: 0.9930960536, blue: 1, alpha: 1)
+        generalInformation.layer.cornerRadius = 8
+
     }
     
     func configureRaceLabel() {
-        
+        guard let model = model else { return }
+        self.view.addSubview(characterRaceLabel)
+        characterRaceLabel.text = "\(model.name) is \(model.race)"
+        characterRaceLabel.translatesAutoresizingMaskIntoConstraints = false
+        characterRaceLabel.topAnchor.constraint(equalTo: generalInformation.bottomAnchor, constant: 4).isActive = true
+        characterRaceLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        characterRaceLabel.clipsToBounds = true
+        characterRaceLabel.textAlignment = .center
+        characterRaceLabel.font = UIFont(name: "Noteworthy", size: 20)
+        characterRaceLabel.textColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
     }
     
     func configureGenderLabel() {
-        
+        guard let model = model else { return }
+        self.view.addSubview(characterGenderLabel)
+        characterGenderLabel.text = "Gender - \(model.gender)"
+        characterGenderLabel.translatesAutoresizingMaskIntoConstraints = false
+        characterGenderLabel.topAnchor.constraint(equalTo: characterRaceLabel.bottomAnchor, constant: 4).isActive = true
+        characterGenderLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        characterGenderLabel.clipsToBounds = true
+        characterGenderLabel.textAlignment = .center
+        characterGenderLabel.font = UIFont(name: "Noteworthy", size: 20)
+        characterGenderLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+    }
+    
+    func configureLocationInformation() {
+        self.view.addSubview(locationInformation)
+        locationInformation.text = "Location Infromation"
+        locationInformation.translatesAutoresizingMaskIntoConstraints = false
+        locationInformation.topAnchor.constraint(equalTo: characterGenderLabel.bottomAnchor, constant: 30).isActive = true
+        locationInformation.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        locationInformation.clipsToBounds = true
+        locationInformation.textAlignment = .center
+        locationInformation.font = UIFont(name: "Noteworthy", size: 25)
+        locationInformation.backgroundColor = #colorLiteral(red: 0.4513868093, green: 0.9930960536, blue: 1, alpha: 1)
+        locationInformation.layer.cornerRadius = 8
     }
     
     func configureOriginLabel() {
+        guard let model = model else { return }
+        self.view.addSubview(characterOriginLabel)
+        if model.origin == "unknown" {
+            characterOriginLabel.text = "\(model.name)'s origin planet is unknown"
+        } else {
+            characterOriginLabel.text = "\(model.name) from \(model.origin)"
+        }
         
+        characterOriginLabel.translatesAutoresizingMaskIntoConstraints = false
+        characterOriginLabel.topAnchor.constraint(equalTo: locationInformation.bottomAnchor, constant: 4).isActive = true
+        characterOriginLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        characterOriginLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 12).isActive = true
+        characterOriginLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -12).isActive = true
+        characterOriginLabel.clipsToBounds = true
+        characterOriginLabel.textAlignment = .center
+        characterOriginLabel.numberOfLines = 0
+        characterOriginLabel.font = UIFont(name: "Noteworthy", size: 20)
+        characterOriginLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
     
     func configureLocationLabel() {
+        guard let model = model else { return }
+        self.view.addSubview(characterLocationLabel)
+        characterLocationLabel.text = "Current \(model.name)'s location is \(model.currentLocation)"
         
+        characterLocationLabel.translatesAutoresizingMaskIntoConstraints = false
+        characterLocationLabel.topAnchor.constraint(equalTo: characterOriginLabel.bottomAnchor, constant: 12).isActive = true
+        characterLocationLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        characterLocationLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -12).isActive = true
+        characterLocationLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -12).isActive = true
+        characterLocationLabel.clipsToBounds = true
+        characterLocationLabel.textAlignment = .center
+        characterLocationLabel.numberOfLines = 0
+        characterLocationLabel.font = UIFont(name: "Noteworthy", size: 20)
+        characterLocationLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
     }
 }

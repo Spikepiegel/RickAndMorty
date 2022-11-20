@@ -92,7 +92,8 @@ class CharactersTableViewCell: UITableViewCell, CharactersTableViewCellProtocol 
         characterLiveStatus.translatesAutoresizingMaskIntoConstraints = false
         characterLiveStatus.leadingAnchor.constraint(equalTo: characterImageView.trailingAnchor, constant: 20).isActive = true
         characterLiveStatus.topAnchor.constraint(equalTo: characterNameLabel.bottomAnchor, constant: -20).isActive = true
-        characterLiveStatus.backgroundColor = #colorLiteral(red: 0.476841867, green: 0.5048075914, blue: 1, alpha: 1)
+        characterLiveStatus.textColor = .white
+        characterLiveStatus.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         characterLiveStatus.layer.cornerRadius = 5
         characterLiveStatus.clipsToBounds = true
 
