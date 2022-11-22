@@ -9,15 +9,18 @@ import UIKit
 
 protocol CharactersViewControllerProtocol {
     func showCharacter(result: [Result])
+    func showMoreCharacters(result: [Result])
 }
 
 class CharactersViewController: UIViewController, CharactersViewControllerProtocol {
+    
+    
     
     private var charactersTableView = UITableView()
     var searchBar = UISearchBar()
 
     var rickModel = [Result]()
-    var searchBarText = [Result]()
+    var searchModel = [Result]()
     var presenter: PresenterProtocol?
     
     override func viewDidLoad() {
@@ -54,7 +57,7 @@ class CharactersViewController: UIViewController, CharactersViewControllerProtoc
         searchBar.sizeToFit()
         searchBar.delegate = self
         searchBar.placeholder = "Search..."
-        searchBar.tintColor = .black
+        searchBar.tintColor = .white
         self.view.backgroundColor = UIColor.white
         self.navigationItem.title = "Characters"
         self.navigationController?.navigationBar.prefersLargeTitles = true
@@ -71,7 +74,13 @@ class CharactersViewController: UIViewController, CharactersViewControllerProtoc
     // MARK: Shows All Characters With Usibg Api Request
     func showCharacter(result: [Result]) {
         self.rickModel = result
-        self.searchBarText = result
+        self.searchModel = result
+        charactersTableView.reloadData()
+    }
+    
+    func showMoreCharacters(result: [Result]) {
+        self.rickModel += result
+        self.searchModel += result
         charactersTableView.reloadData()
     }
     
@@ -98,24 +107,29 @@ class CharactersViewController: UIViewController, CharactersViewControllerProtoc
 extension CharactersViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchBarText.count
+        return searchModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = charactersTableView.dequeueReusableCell(withIdentifier: "CharactersCell") as! CharactersTableViewCell
-        let character = searchBarText[indexPath.row]
+        let character = searchModel[indexPath.row]
         cell.set(model: character)
+        
+        if indexPath.row == searchModel.count - 1 {
+            presenter?.tableViewDidScrolledBottom()
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let destination = CharacterInformationViewController()
-        let character = rickModel[indexPath.row]
+        let character = searchModel[indexPath.row]
         navigationController?.pushViewController(destination, animated: true)
         let model = InformationViewModel(name: character.name,
                                      status: character.status.rawValue,
-                                     race: character.species.rawValue,
-                                     gender: character.gender.rawValue,
+                                         race: character.species ?? "unkwn",
+                                     gender: character.gender ?? "unknkown",
                                      image: character.image,
                                      origin: character.origin.name,
                                      currentLocation: character.location.name)
@@ -127,13 +141,15 @@ extension CharactersViewController: UITableViewDelegate, UITableViewDataSource {
         print(segue)
     }
     
+    
+    
 }
 
 // MARK: Controls Search Bar Conditions
 extension CharactersViewController: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchBarText = rickModel
+        searchModel = rickModel
         charactersTableView.reloadData()
         searchBar.text = nil
     }
@@ -143,12 +159,12 @@ extension CharactersViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchBarText.removeAll()
+        searchModel.removeAll()
         if let text = searchBar.text {
-            searchBarText = rickModel.filter { $0.name.contains(text) }
+            searchModel = rickModel.filter { $0.name.contains(text) }
         }
         if searchBar.text == "" {
-            searchBarText = rickModel
+            searchModel = rickModel
         }
         charactersTableView.reloadData()
     }
